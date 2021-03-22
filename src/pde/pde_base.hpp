@@ -264,7 +264,7 @@ public:
     expect(coefficients_.nrows() == coefficients_.ncols());
     fk::matrix<P> new_coeffs = eye<P>(new_dof);
       profiling::stop("new_dof");
-      std::cerr << "SIZE " << new_coeffs.size()<< std::endl;
+      //std::cerr << "SIZE " << new_coeffs.size()<< std::endl;
     //std::vector<partial_term<P>> partial_terms_;
     int cnt=0;
     for (auto const &pterm : partial_terms_)
@@ -273,7 +273,7 @@ public:
       //std::cerr << "CNT " << cnt++ << std::endl;
       profiling::start("get_coefficient");
       fk::matrix<P> const &partial_coeff = pterm.get_coefficients();
-      std::cerr << "SIZE " << partial_coeff.size()<< std::endl;
+      //std::cerr << "SIZE " << partial_coeff.size()<< std::endl;
       expect(partial_coeff.size() >
              new_dof); // make sure we built the partial terms to support
                        // new level/degree
@@ -285,14 +285,14 @@ public:
                                      // these device-side after construction.
       //partial_coeff_view.print("Partial coeff view");
       profiling::start("new_coeff");
-      std::cerr << "SIZE " << partial_coeff_view.size()<< std::endl;
+      //std::cerr << "SIZE " << partial_coeff_view.size()<< std::endl;
       new_coeffs = new_coeffs * partial_coeff_view;
       profiling::stop("new_coeff");
       //new_coeffs.print("new coeffs");
     }
     static int total =0;
     total += cnt;
-    std::cerr << "CNT " << cnt << " TOTAL "<< total << std::endl;
+    //std::cerr << "CNT " << cnt << " TOTAL "<< total << std::endl;
     profiling::start("transfer_from");
     fk::matrix<P, mem_type::view, resource::device>(coefficients_, 0,
                                                     new_dof - 1, 0, new_dof - 1)
