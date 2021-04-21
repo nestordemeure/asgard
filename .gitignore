@@ -6,6 +6,8 @@ _build
 compile_commands.json
 **/__pycache__
 profiling/perf_predict/internal_data
+cmake-build-*
+.idea
 
 # ignore some of contrib
 contrib/blas/openblas
