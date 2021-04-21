@@ -18,12 +18,7 @@
 #define HOST_FUNCTION
 #endif
 
-#include "kronmult1_xbatched.hpp"
-#include "kronmult2_xbatched.hpp"
-#include "kronmult3_xbatched.hpp"
-#include "kronmult4_xbatched.hpp"
-#include "kronmult5_xbatched.hpp"
-#include "kronmult6_xbatched.hpp"
+#include "kronmult/xbatched/xbatched.hpp"
 
 #ifdef ASGARD_USE_OPENMP
 #include <omp.h>
