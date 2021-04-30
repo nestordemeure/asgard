@@ -1,6 +1,10 @@
 #include "kronmult_cuda.hpp"
 #include "build_info.hpp"
 
+#include <cmath>
+#include <cassert>
+#include <algorithm>
+
 #ifdef ASGARD_USE_CUDA
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -18,7 +22,7 @@
 #define HOST_FUNCTION
 #endif
 
-#include "kronmult/xbatched/xbatched.hpp"
+#include "kronmult/kronmult.hpp"
 
 #ifdef ASGARD_USE_OPENMP
 #include <omp.h>
@@ -296,80 +300,19 @@ void call_kronmult(int const n, P *x_ptrs[], P *output_ptrs[], P *work_ptrs[],
                    int const num_krons, int const num_dims)
 {
 #ifdef ASGARD_USE_CUDA
-  {
     int constexpr warpsize    = 32;
     int constexpr nwarps      = 1;
     int constexpr num_threads = nwarps * warpsize;
 
-    switch (num_dims)
-    {
-    case 1:
-      kronmult1_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    case 2:
-      kronmult2_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    case 3:
-      kronmult3_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    case 4:
-      kronmult4_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    case 5:
-      kronmult5_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    case 6:
-      kronmult6_xbatched<P><<<num_krons, num_threads>>>(
-          n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
-      break;
-    default:
-      expect(false);
-    };
+    kronmult_batched<P><<<num_krons, num_threads>>>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
 
     // -------------------------------------------
     // note important to wait for kernel to finish
     // -------------------------------------------
     auto const stat = cudaDeviceSynchronize();
     expect(stat == cudaSuccess);
-  }
 #else
-
-  {
-    switch (num_dims)
-    {
-    case 1:
-      kronmult1_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    case 2:
-      kronmult2_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    case 3:
-      kronmult3_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    case 4:
-      kronmult4_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    case 5:
-      kronmult5_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    case 6:
-      kronmult6_xbatched<P>(n, operator_ptrs, lda, x_ptrs, output_ptrs,
-                            work_ptrs, num_krons);
-      break;
-    default:
-      expect(false);
-    };
-  }
+   kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
 #endif
 }
 
