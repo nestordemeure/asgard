@@ -14,6 +14,7 @@
 #define SHARED_MEMORY __shared__
 #define DEVICE_FUNCTION __device__
 #define HOST_FUNCTION __host__
+#include "kronmult/kronmult_gpu.hpp"
 #else
 #define GLOBAL_FUNCTION
 #define SYNCTHREADS
@@ -22,10 +23,9 @@
 #define HOST_FUNCTION
 #endif
 
-#include "kronmult/kronmult.hpp"
-
 #ifdef ASGARD_USE_OPENMP
 #include <omp.h>
+#include "kronmult/kronmult_openmp.hpp"
 #endif
 
 // duplicated code from tools component - need host/device assert compiled
@@ -304,7 +304,7 @@ void call_kronmult(int const n, P *x_ptrs[], P *output_ptrs[], P *work_ptrs[],
     int constexpr nwarps      = 1;
     int constexpr num_threads = nwarps * warpsize;
 
-    kronmult_batched<P><<<num_krons, num_threads>>>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
+    kronmult_gpu::kronmult_batched<P><<<num_krons, num_threads>>>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
 
     // -------------------------------------------
     // note important to wait for kernel to finish
@@ -312,7 +312,7 @@ void call_kronmult(int const n, P *x_ptrs[], P *output_ptrs[], P *work_ptrs[],
     auto const stat = cudaDeviceSynchronize();
     expect(stat == cudaSuccess);
 #else
-   kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
+    kronmult_openmp::kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
 #endif
 }
 
