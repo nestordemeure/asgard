@@ -1,0 +1,4 @@
+module purge
+module load PrgEnv-gnu timemory
+module load cmake/3.18.2
+module load cray-libsci cray-mpich
