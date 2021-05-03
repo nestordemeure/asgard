@@ -39,7 +39,7 @@ endif ()
 string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wpedantic")
 
 # set up possible commandline input variable defaults (override with -D)
-option (ASGARD_BUILD_TESTS "Build tests for asgard" ON)
+option (ASGARD_BUILD_TESTS "Build tests for asgard" OFF)
 option (ASGARD_BUILD_OPENBLAS "Download and build our own OpenBLAS" OFF)
 option (ASGARD_BUILD_HDF5 "Download and build our own HDF5/HighFive" OFF)
 option (ASGARD_HDF5_PATH "optional location of lib/ containing HDF5" "")
