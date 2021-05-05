@@ -55,6 +55,7 @@ option (ASGARD_PROFILE_VALGRIND "enable profiling support for using valgrind" ""
 option (ASGARD_GRAPHVIZ_PATH "optional location of bin/ containing dot executable" "")
 option (ASGARD_IO_HIGHFIVE "Use the HighFive HDF5 header library for I/O" OFF)
 option (ASGARD_USE_CUDA "Optional CUDA support for asgard" OFF)
+option (ASGARD_USE_BLAS "Optional BLAS usage for asgard" OFF)
 option (ASGARD_USE_OPENMP "Optional openMP support for asgard" ON)
 option (ASGARD_USE_MPI "Optional distributed computing support for asgard" OFF)
 option (ASGARD_USE_SLATE "Use optional slate linear algebra library" OFF)

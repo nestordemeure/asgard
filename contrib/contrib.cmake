@@ -188,6 +188,10 @@ if(ASGARD_USE_CUDA)
     set(USE_GPU 1)
 endif()
 
+if(ASGARD_USE_BLAS)
+    set(USE_BLAS 1)
+endif()
+
 set(KRON_PATH "${CMAKE_CURRENT_BINARY_DIR}/contrib/kronmult/")
 set(KRON_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/contrib/kronmult/")
 
