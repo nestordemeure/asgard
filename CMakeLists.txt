@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.13) # remove cray check below when >= 3.16
 
 project (asgard
   VERSION 0.3.0
-  LANGUAGES CXX
+  LANGUAGES CUDA CXX
 )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "CrayLinuxEnvironment")
@@ -54,11 +54,11 @@ option (ASGARD_PROFILE_PERF "enable profiling support for using linux perf" "")
 option (ASGARD_PROFILE_VALGRIND "enable profiling support for using valgrind" "")
 option (ASGARD_GRAPHVIZ_PATH "optional location of bin/ containing dot executable" "")
 option (ASGARD_IO_HIGHFIVE "Use the HighFive HDF5 header library for I/O" OFF)
-option (ASGARD_USE_CUDA "Optional CUDA support for asgard" OFF)
+option (ASGARD_USE_CUDA "Optional CUDA support for asgard" ON)
 option (ASGARD_USE_OPENMP "Optional openMP support for asgard" ON)
 option (ASGARD_USE_MPI "Optional distributed computing support for asgard" OFF)
 option (ASGARD_USE_SLATE "Use optional slate linear algebra library" OFF)
-option (ASGARD_USE_TIMEMORY "Use optional TiMemory profiling library" ON)
+option (ASGARD_USE_TIMEMORY "Use optional TiMemory profiling library" OFF)
 option (ASGARD_USE_DOUBLE_PREC "enable or disable double-precision floating point" ON)
 set (ASGARD_TESTING_RANKS "0" CACHE STRING "Override default number of ranks to use for testing")
 
@@ -236,7 +236,7 @@ if (ASGARD_USE_OPENMP AND NOT ASGARD_USE_MKL)
    target_link_libraries(kronmult PRIVATE OpenMP::OpenMP_CXX)
 endif ()
 
-target_link_libraries(kronmult_cuda PRIVATE kron)
+target_link_libraries(kronmult_cuda PRIVATE kronmult_gpu)
 
 if (ASGARD_USE_OPENMP AND NOT ASGARD_USE_MKL)
    target_link_libraries(kronmult_cuda PRIVATE OpenMP::OpenMP_CXX)

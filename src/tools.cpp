@@ -5,9 +5,11 @@
 #include <math.h>
 #include <numeric>
 #include <sstream>
+#ifdef USE_TIMEMORY
 #include <timemory/library.h>
 #include <timemory/timemory.hpp>
 #include <timemory/tools/timemory-mpip.h>
+#endif
 // TODO make an initialize and finalize function
 
 namespace tools
@@ -62,12 +64,16 @@ simple_timer timer;
 void start(const char *name)
 {
   // use library or template API
+#ifdef USE_TIMEMORY
   timemory_push_region(name);
+#endif
 }
 void stop(const char *name)
 {
   // use library or template API
+#ifdef USE_TIMEMORY
   timemory_pop_region(name);
+#endif
 }
 
 namespace profiling
@@ -80,6 +86,7 @@ void end_iteration(const std::string &_name, int64_t _data_size,
 } // namespace profiling
 
 // TIMEMORY_DEFINE_API(asgard);
+#ifdef USE_TIMEMORY
 namespace tim
 {
 namespace api
@@ -144,12 +151,6 @@ using iteration_bundle_t =
 using iteration_data_t = std::unordered_map<std::string, iteration_bundle_t>;
 
 static iteration_data_t iteration_data;
-
-namespace profiling
-{
-void start(const std::string &_name) { timemory_push_region(_name.c_str()); }
-void stop(const std::string &_name) { timemory_pop_region(_name.c_str()); }
-
 void begin_iteration(const std::string &_name)
 {
   std::cerr << "START ITERATION" << std::endl;
@@ -179,6 +180,21 @@ void end_iteration(const std::string &_name, int64_t _data_size,
   iteration_data.erase(itr);
 }
 } // namespace profiling
+#endif
+
+namespace profiling
+{
+void start(const std::string &_name) { 
+#ifdef USE_TIMEMORY
+    timemory_push_region(_name.c_str()); 
+#endif
+}
+void stop(const std::string &_name) {
+#ifdef USE_TIMEMORY
+    timemory_pop_region(_name.c_str()); 
+#endif
+}
+}
 
 /*
    using namespace tim::component;

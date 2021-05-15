@@ -20,7 +20,7 @@
 #include "time_advance.hpp"
 #include "transformations.hpp"
 #include <numeric>
-#include <timemory/timemory.hpp>
+//#include <timemory/timemory.hpp>
 
 #ifdef ASGARD_USE_DOUBLE_PREC
 using prec = double;
@@ -31,7 +31,8 @@ using prec = float;
 int main(int argc, char **argv)
 {
   // -- parse cli
-  tim::timemory_init(argc, argv);
+  //tim::timemory_init(argc, argv);
+  //profiling::init(argc, argv);
   profiling::start("Initialization");
   parser const cli_input(argc, argv);
   if (!cli_input.is_valid())
@@ -170,7 +171,7 @@ int main(int argc, char **argv)
   fk::vector<prec> f_val(initial_condition);
   node_out() << "--- begin time loop w/ dt " << pde->get_dt() << " ---\n";
   profiling::stop("Initialization");
-  profiling::begin_iteration("Main");
+  //profiling::begin_iteration("Main");
   for (auto i = 0; i < opts.num_time_steps; ++i)
   {
     // take a time advance step
@@ -252,7 +253,7 @@ int main(int argc, char **argv)
 
     node_out() << "timestep: " << i << " complete" << '\n';
   }
-  profiling::end_iteration("Main", default_workspace_MB, opts.num_time_steps);
+  //profiling::end_iteration("Main", default_workspace_MB, opts.num_time_steps);
 
   node_out() << "--- simulation complete ---" << '\n';
 
@@ -267,7 +268,8 @@ int main(int argc, char **argv)
 
   node_out() << tools::timer.report() << '\n';
 
-  tim::timemory_finalize();
+  //tim::timemory_finalize();
+  //profiling::finalize();
   finalize_distribution();
 
   return 0;
