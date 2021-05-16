@@ -177,15 +177,15 @@ if (ASGARD_BUILD_TESTS)
 endif ()
 
 
-
 ###############################################################################
 ## E.D.'s kronmult library
 #
 # link to Ed D'Azevedo's kronmult library, or download/build if not present
 #
 ###############################################################################
-if(ASGARD_USE_CUDA)
-    set(USE_GPU 1)
+
+if(BLAS_FOUND)
+    set(KRONMULT_USE_BLAS 1)
 endif()
 
 set(KRON_PATH "${CMAKE_CURRENT_BINARY_DIR}/contrib/kronmult/")
