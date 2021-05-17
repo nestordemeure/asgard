@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.13) # remove cray check below when >= 3.16
 
 project (asgard
   VERSION 0.3.0
-  LANGUAGES CUDA CXX
+  LANGUAGES CXX
 )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "CrayLinuxEnvironment")
