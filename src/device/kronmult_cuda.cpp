@@ -303,7 +303,7 @@ void call_kronmult(int const n, P *x_ptrs[], P *output_ptrs[], P *work_ptrs[],
     auto const stat = kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
     expect(stat == cudaSuccess);
 #else
-   kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
+   algo_993::kronmult_batched<P>(num_dims, n, operator_ptrs, lda, x_ptrs, output_ptrs, work_ptrs, num_krons);
 #endif
 }
 

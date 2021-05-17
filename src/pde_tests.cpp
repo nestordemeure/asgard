@@ -68,6 +68,37 @@ void test_source_vectors(PDE<P> const &pde, std::string const base_dir,
   }
 }
 
+TEMPLATE_TEST_CASE("testing advect_blob 1 implementations", "[pde]", double,
+                   float)
+{
+    auto const pde             = make_PDE<TestType>(PDE_opts::advect_blob_1);
+    std::string const base_dir = "../testing/generated-inputs/pde/advect_blob_1_";
+    fk::vector<TestType> const x = {0.1, 0.2, 0.3, 0.4, 0.5};
+    TestType const time          = 5;
+
+    SECTION("advect blob 1 initial condition functions")
+    {
+        test_initial_condition<TestType>(*pde, base_dir, x);
+    }
+
+    SECTION("advect blob 1 exact solution functions")
+    {
+        test_exact_solution<TestType>(*pde, base_dir, x, time);
+    }
+
+    SECTION("advect blob 1 source functions")
+    {
+        test_source_vectors(*pde, base_dir, x, time);
+    }
+
+    SECTION("advect blob 1 dt")
+    {
+        TestType const gold = read_scalar_from_txt_file(base_dir + "dt.dat");
+        TestType const dt   = pde->get_dt() / parser::DEFAULT_CFL;
+        REQUIRE(dt == gold);
+    }
+}
+
 TEMPLATE_TEST_CASE("testing diffusion 2 implementations", "[pde]", double,
                    float)
 {
