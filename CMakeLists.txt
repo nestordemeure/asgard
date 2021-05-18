@@ -36,7 +36,7 @@ else ()
 endif ()
 
 # add compiler flags we always want to use
-string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wpedantic")
+string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wpedantic -Wfloat-conversion")
 
 # set up possible commandline input variable defaults (override with -D)
 option (ASGARD_BUILD_TESTS "Build tests for asgard" ON)

@@ -41,8 +41,8 @@ private:
   static int constexpr num_dims_           = 1;
   static int constexpr num_sources_        = 2;
   static int constexpr num_terms_          = 1;
-  static int constexpr blob_speep_         = 2; //v (matlab)
-  static int constexpr blob_width_         = 0.1; // sig (matlab)
+  static double constexpr blob_speed_      = 2; //v (matlab)
+  static double constexpr blob_width_      = 0.1; // sig (matlab)
   static bool constexpr do_poisson_solve_  = false;
   static bool constexpr has_analytic_soln_ = true;
 
@@ -66,8 +66,8 @@ private:
     fk::vector<P> fx(x.size());
     std::transform(x.begin(), x.end(), fx.begin(),
                    //a_x = @(x,p,t) exp(-(x-p.v*t).^2/p.sig.^2)+exp(-(x-p.v*t+2).^2/p.sig.^2);
-                   [t](P const &x) { return exp(-pow((x-blob_speep_*t),2)/pow(blob_width_,2)) +
-                   exp(-pow((x-blob_speep_*t+2),2)/pow(blob_width_,2));});
+                   [t](P const &x) { return exp(-pow((x-blob_speed_*t),2)/pow(blob_width_,2)) +
+                                           exp(-pow((x-blob_speed_*t+2),2)/pow(blob_width_,2));});
     return fx;
   }
 
@@ -116,7 +116,7 @@ private:
        * */
     ignore(x);// suppress compiler warnings
     ignore(time);// suppress compiler warnings
-    return -blob_speep_;
+    return -blob_speed_;
   }
 
   // define dimensions
